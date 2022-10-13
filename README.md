@@ -23,6 +23,8 @@ https://napari.org/stable/plugins/index.html
 
 ## Installation
 
+You are better off using conda. You will need pytables, and ideally CGAL.
+
 You can install `napari-tyssue` via [pip]:
 
     pip install napari-tyssue

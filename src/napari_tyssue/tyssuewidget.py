@@ -11,14 +11,16 @@ from typing import TYPE_CHECKING
 
 # tyssue imports
 
-import pandas as pd
+# import pandas as pd
 import numpy as np
-import json
+
+# import json
 
 from IPython.display import display, Image
 
 import napari
-import vispy as vp
+
+# import vispy as vp
 
 import tyssue
 from tyssue import Sheet, History
@@ -33,7 +35,7 @@ from tyssue.config.draw import sheet_spec
 from tyssue.utils.utils import spec_updater
 
 # from tyssue.draw.ipv_draw import _get_meshes
-from tyssue.draw.vispy_draw import sheet_view, face_visual, edge_visual
+# from tyssue.draw.vispy_draw import sheet_view, face_visual, edge_visual
 
 # from tyssue.draw import sheet_view, create_gif, browse_history
 from tyssue.io.hdf5 import save_datasets, load_datasets

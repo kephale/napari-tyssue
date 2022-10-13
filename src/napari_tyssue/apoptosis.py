@@ -11,14 +11,17 @@ from typing import TYPE_CHECKING
 
 # tyssue imports
 
-import pandas as pd
-import numpy as np
-import json
+# import pandas as pd
+# import numpy as np
+# import json
 
 from IPython.display import display, Image
 
+import pooch
+
 import napari
-import vispy as vp
+
+# import vispy as vp
 
 import tyssue
 from tyssue import Sheet, History
@@ -33,7 +36,7 @@ from tyssue.config.draw import sheet_spec
 from tyssue.utils.utils import spec_updater
 
 # from tyssue.draw.ipv_draw import _get_meshes
-from tyssue.draw.vispy_draw import sheet_view, face_visual, edge_visual
+# from tyssue.draw.vispy_draw import sheet_view, face_visual, edge_visual
 
 # from tyssue.draw import sheet_view, create_gif, browse_history
 from tyssue.io.hdf5 import save_datasets, load_datasets
@@ -80,7 +83,13 @@ class ApoptosisWidget(TyssueWidget):
 
     def start_simulation(self):
         # Read pre-recorded datasets
-        h5store = "data/small_hexagonal.hf5"
+
+        h5store = pooch.retrieve(
+            url="https://github.com/DamCB/tyssue-demo/raw/master/data/small_hexagonal.hf5",
+            known_hash=None,
+            progressbar=True,
+        )
+
         datasets = load_datasets(h5store, data_names=["face", "vert", "edge"])
 
         # Corresponding specifications

@@ -11,14 +11,15 @@ from typing import TYPE_CHECKING
 
 # tyssue imports
 
-import pandas as pd
-import numpy as np
-import json
+# import pandas as pd
+# import numpy as np
+# import json
 
 from IPython.display import display, Image
 
 import napari
-import vispy as vp
+
+# import vispy as vp
 
 import tyssue
 from tyssue import Sheet, History
@@ -33,14 +34,15 @@ from tyssue.config.draw import sheet_spec
 from tyssue.utils.utils import spec_updater
 
 # from tyssue.draw.ipv_draw import _get_meshes
-from tyssue.draw.vispy_draw import sheet_view, face_visual, edge_visual
+# from tyssue.draw.vispy_draw import sheet_view, face_visual, edge_visual
 
 # from tyssue.draw import sheet_view, create_gif, browse_history
 from tyssue.io.hdf5 import save_datasets, load_datasets
 
 from tyssue import Sheet, config
 from tyssue.io import hdf5
-from tyssue.draw import sheet_view
+
+# from tyssue.draw import sheet_view
 from tyssue.dynamics import effectors, model_factory
 
 from tyssue.generation import ellipsoid_sheet
@@ -55,7 +57,8 @@ from tyssue.geometry.sheet_geometry import EllipsoidGeometry as geom
 
 from invagination.ellipsoid import initiate_ellipsoid, define_mesoderm
 from invagination.delamination import delamination_process, constriction_rate
-from invagination.plots import mesoderm_position
+
+# from invagination.plots import mesoderm_position
 from invagination.ellipsoid import VitellineElasticity, RadialTension
 
 # napari imports
@@ -189,7 +192,7 @@ class InvaginationWidget(TyssueWidget):
         res = solver.find_energy_min(sheet, geom, model, **solver_kw)
 
         print(res.message)
-        fig, ax = sheet_view(sheet, coords=list("zx"), mode="quick")
+        # fig, ax = sheet_view(sheet, coords=list("zx"), mode="quick")
 
         # Define ovoid mesoderm
         define_mesoderm(sheet, a=15, b=6.0)
@@ -198,7 +201,7 @@ class InvaginationWidget(TyssueWidget):
         delaminating_cells = sheet.face_df[sheet.face_df["is_mesoderm"]].index
         sheet.face_df["is_relaxation"] = False
         print("number of apoptotic cells: {}".format(delaminating_cells.size))
-        fig, axes = mesoderm_position(sheet, delaminating_cells)
+        # fig, axes = mesoderm_position(sheet, delaminating_cells)
 
         sheet.face_df["id"] = sheet.face_df.index.values
         sheet.settings["delamination"] = self.settings
