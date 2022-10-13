@@ -14,7 +14,6 @@ from typing import TYPE_CHECKING
 import pandas as pd
 import numpy as np
 import json
-import matplotlib.pylab as plt
 
 import ipywidgets as widgets
 from IPython.display import display, Image
