@@ -15,7 +15,6 @@ import pandas as pd
 import numpy as np
 import json
 
-import ipywidgets as widgets
 from IPython.display import display, Image
 
 import napari
