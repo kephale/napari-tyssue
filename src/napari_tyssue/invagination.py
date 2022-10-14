@@ -269,7 +269,7 @@ class InvaginationWidget(TyssueWidget):
         """
         This function is called after every simulated timestep.
         """
-        LOGGER.debug("ApoptosisWidget._on_simulation_update: timestep")
+        LOGGER.debug("InvaginationWidget._on_simulation_update: timestep")
 
         specs_kw = {}
         draw_specs = sheet_spec()
@@ -284,7 +284,7 @@ class InvaginationWidget(TyssueWidget):
 
         try:
             # if the layer exists, update the data
-            self.viewer.layers["tyssue: apoptosis"].data = mesh
+            self.viewer.layers["tyssue: invagination"].data = mesh
         except KeyError:
             # otherwise add it to the viewer
             self.viewer.add_surface(
@@ -292,5 +292,5 @@ class InvaginationWidget(TyssueWidget):
                 colormap="turbo",
                 opacity=0.9,
                 contrast_limits=[0, 1],
-                name="tyssue: apoptosis",
+                name="tyssue: invagination",
             )
