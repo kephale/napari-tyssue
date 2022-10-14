@@ -18,7 +18,7 @@ apoptosis demo from
 [tyssue-demo](https://github.com/DamCB/tyssue-demo).
 
 ![napari-tyssue demo of invagination
-model](./assets/napari_tyssue_invagination_3d.gif)
+model](./assets/napari_tyssue_invagination_3x.gif)
 
 
 Example video of apoptosis demo simulation created based on work under
