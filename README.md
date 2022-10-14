@@ -9,6 +9,19 @@
 
 A napari plugin for use with the tyssue library
 
+![napari-tyssue demo of apoptosis
+model](./assets/napari_tyssue_apoptosis.gif)
+Example video of apoptosis demo simulation created based on the
+apoptosis demo from
+[tyssue-demo](https://github.com/DamCB/tyssue-demo).
+
+![napari-tyssue demo of invagination
+model](./assets/napari_tyssue_invagination_3d.gif)
+Example video of apoptosis demo simulation created based on work under
+revision by Suzanne group at U Toulouse entitled
+"Epithelio-mesenchymal transition generates an apico-basal driving
+force required for tissue remodeling" [available here](https://github.com/DamCB/invagination).
+
 ----------------------------------
 
 This [napari] plugin was generated with [Cookiecutter] using [@napari]'s [cookiecutter-napari-plugin] template.

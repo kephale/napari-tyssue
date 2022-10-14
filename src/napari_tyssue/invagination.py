@@ -85,6 +85,8 @@ class InvaginationWidget(TyssueWidget):
 
         # tyssue model init
 
+        # TODO check if tyssue was installed by conda, if not then fail for this simulation
+
         # The history stores simulation outputs
         self.history = None
 
