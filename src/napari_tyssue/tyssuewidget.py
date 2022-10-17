@@ -16,8 +16,6 @@ import numpy as np
 
 # import json
 
-from IPython.display import display, Image
-
 import napari
 
 # import vispy as vp
