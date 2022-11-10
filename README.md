@@ -9,16 +9,14 @@
 
 A napari plugin for use with the tyssue library
 
-![napari-tyssue demo of apoptosis
-model](./assets/napari_tyssue_apoptosis.gif)
+![napari-tyssue demo of apoptosis model](https://github.com/kephale/napari-tyssue/raw/main/assets/napari_tyssue_apoptosis.gif)
 
 
 Example video of apoptosis demo simulation created based on the
 apoptosis demo from
 [tyssue-demo](https://github.com/DamCB/tyssue-demo).
 
-![napari-tyssue demo of invagination
-model](./assets/napari_tyssue_invagination_3x.gif)
+![napari-tyssue demo of invagination model](https://github.com/kephale/napari-tyssue/raw/main/assets/napari_tyssue_invagination_3x.gif)
 
 
 Example video of apoptosis demo simulation created based on work under
