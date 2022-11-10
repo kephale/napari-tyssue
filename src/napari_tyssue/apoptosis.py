@@ -1,22 +1,10 @@
 """
-This module is an example of a barebones QWidget plugin for napari
+This module implements a plugin that supports the tyssue apoptosis demo.
 
-It implements the Widget specification.
-see: https://napari.org/stable/plugins/guides.html?#widgets
-
-Replace code below according to your needs.
+This module was derived from https://github.com/DamCB/tyssue-demo, a MPLv2
+licensed project.
 """
 import logging
-from typing import TYPE_CHECKING
-
-# tyssue imports
-
-# import pandas as pd
-# import numpy as np
-# import json
-
-from IPython.display import display, Image
-
 import pooch
 
 import napari

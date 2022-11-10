@@ -1,0 +1,21 @@
+
+napari-tyssue Licensing
+==================
+
+    Different licenses apply to different files in this package. Here
+    is a rough summary of which licenses apply to which parts of this
+    package (but check the individual files to be sure!):
+
+      - apoptosis and invagination are MPLv2, see the files for more
+        details.
+
+      - the remaining code, documentation, and files are under BSD-3
+
+    As usual, this software is provided "as is", without any warranty.
+
+    The following license texts are included in the following files:
+      - COPYING.MPLv2: Mozilla Public License Version 2.0
+
+    If you have questions, don't hesitate to ask the author(s) for more
+    information.
+
