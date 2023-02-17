@@ -5,6 +5,7 @@ This module was derived from https://github.com/DamCB/tyssue-demo, a MPLv2
 licensed project.
 """
 import logging
+import sys
 import pooch
 
 import napari
@@ -42,7 +43,14 @@ from superqt.utils import ensure_main_thread
 
 LOGGER = logging.getLogger("napari_tyssue.ApoptosisWidget")
 
-from .tyssuewidget import TyssueWidget, _get_meshes
+streamHandler = logging.StreamHandler(sys.stdout)
+formatter = logging.Formatter(
+    "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+streamHandler.setFormatter(formatter)
+LOGGER.addHandler(streamHandler)
+
+from napari_tyssue.tyssuewidget import TyssueWidget, _get_meshes
 
 
 # This widget wraps the apoptosis demo from tyssue.
@@ -114,13 +122,13 @@ class ApoptosisWidget(TyssueWidget):
         solver = QSSolver()
 
         res = solver.find_energy_min(sheet, geom, model, **min_settings)
-        print(res["success"])
+        LOGGER.info((res["success"]))
 
         # Choose apoptotic cell
         # TODO this cell selection could be interactive
 
         apoptotic_cell = 16
-        print(
+        LOGGER.info(
             "Apoptotic cell position:\n{}".format(
                 sheet.face_df.loc[apoptotic_cell, sheet.coords]
             )
@@ -129,7 +137,9 @@ class ApoptosisWidget(TyssueWidget):
             sheet.edge_df["face"] == apoptotic_cell
         ]
         apoptotic_verts = apoptotic_edges["srce"].values
-        print("Indices of the apoptotic vertices: {}".format(apoptotic_verts))
+        LOGGER.info(
+            "Indices of the apoptotic vertices: {}".format(apoptotic_verts)
+        )
 
         from tyssue.behaviors.sheet import apoptosis
         from tyssue.behaviors import EventManager
@@ -196,8 +206,10 @@ class ApoptosisWidget(TyssueWidget):
         sheet = self.history.retrieve(self.t)
         meshes = _get_meshes(sheet, coords, draw_specs)
         mesh = meshes[0]
-        print(mesh)
-        print(f"mesh: ({mesh[0].shape}, {mesh[1].shape}, {mesh[2].shape})")
+        LOGGER.info(mesh)
+        LOGGER.info(
+            f"mesh: ({mesh[0].shape}, {mesh[1].shape}, {mesh[2].shape})"
+        )
 
         try:
             # if the layer exists, update the data
@@ -211,3 +223,14 @@ class ApoptosisWidget(TyssueWidget):
                 contrast_limits=[0, 1],
                 name="tyssue: apoptosis",
             )
+
+
+if __name__ == "__main__":
+    viewer = napari.Viewer()
+
+    # LOGGER.setLevel(logging.DEBUG)
+    widget = ApoptosisWidget(viewer)
+
+    widget.start_simulation()
+
+    # widget = viewer.window.add_plugin_dock_widget("napari-tyssue")

@@ -105,7 +105,6 @@ def face_mesh(sheet, coords, **face_draw_specs):
 
 
 def _get_meshes(sheet, coords, draw_specs):
-
     meshes = []
     edge_spec = draw_specs["edge"]
     edge_spec["visible"] = False
@@ -123,7 +122,7 @@ def _get_meshes(sheet, coords, draw_specs):
     else:
         faces = None
 
-    print("faces", faces)
+    LOGGER.info("faces", faces)
     return meshes
 
 
