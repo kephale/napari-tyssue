@@ -10,6 +10,8 @@ import pooch
 
 import napari
 
+import numpy as np
+
 # import vispy as vp
 
 import tyssue
@@ -177,8 +179,7 @@ class ApoptosisWidget(TyssueWidget):
             while (
                 manager.current and self.t < self.stop and self.running == True
             ):
-                manager.execute(sheet)
-                self.t += 1
+                manager.execute(sheet)                
                 res = solver.find_energy_min(
                     sheet, geom, model, **min_settings
                 )
@@ -188,6 +189,7 @@ class ApoptosisWidget(TyssueWidget):
                 pbr.update(1)
                 pbr.set_description(f"Simulation step {self.t}")
                 self._on_simulation_update()
+                self.t += 1
 
         color = sheet.vert_df["y"]
 
@@ -200,28 +202,66 @@ class ApoptosisWidget(TyssueWidget):
 
         specs_kw = {}
         draw_specs = sheet_spec()
+        draw_specs["vert"]["visible"] = True
         spec_updater(draw_specs, specs_kw)
         coords = ["x", "y", "z"]
 
+        layer_name = "tyssue: apoptosis"
+
+        vert_offset = 0
+        if layer_name in self.viewer.layers:
+            # Offset is # of vertices for all timepoints
+            vert_offset = self.viewer.layers[layer_name].data[0].shape[0]
+
         sheet = self.history.retrieve(self.t)
         meshes = _get_meshes(sheet, coords, draw_specs)
-        mesh = meshes[0]
-        LOGGER.info(mesh)
+        vertices, faces, values = meshes[0]
+
         LOGGER.info(
-            f"mesh: ({mesh[0].shape}, {mesh[1].shape}, {mesh[2].shape})"
+            f"num_meshes = {len(meshes)} mesh: ({vertices.shape}, {faces.shape}, {values.shape})"
         )
+
+        num_verts = vertices.shape[0]
+
+        # Now we need to make the mesh into a timepoint
+        tp_vertices = np.concatenate(
+            (np.ones((num_verts, 1)) * self.t, vertices), axis=1
+        )
+        tp_faces = faces + vert_offset
+
+        # rho = np.linalg.norm(self.monolayer.vert_df[self.monolayer.coords], axis=1)
+        
+        # Use rho value for coloring
+        # values = np.asarray(sheet.vert_df["rho"])
+
+        # multichannel values test
+        #values = np.concatenate((values.reshape((1, num_verts)), values.reshape((1, num_verts))), axis=0)
 
         try:
             # if the layer exists, update the data
-            self.viewer.layers["tyssue: apoptosis"].data = mesh
+            curr_verts, curr_faces, curr_values = self.viewer.layers[
+                layer_name
+            ].data
+
+            self.viewer.layers[layer_name].data = (
+                np.concatenate((curr_verts, tp_vertices), axis=0),
+                np.concatenate((curr_faces, tp_faces), axis=0),
+                # For multichannel
+                # np.concatenate((curr_values, values), axis=1),
+                np.concatenate((curr_values, values), axis=0),
+            )
+
+            # Update timepoint that is displayed
+            self.viewer.dims.set_current_step(0, self.t)
+            
         except KeyError:
             # otherwise add it to the viewer
             self.viewer.add_surface(
-                mesh,
-                colormap="turbo",
+                (tp_vertices, tp_faces, values),
+                colormap="viridis",
                 opacity=0.9,
                 contrast_limits=[0, 1],
-                name="tyssue: apoptosis",
+                name=layer_name,
             )
 
 
@@ -232,3 +272,4 @@ if __name__ == "__main__":
     widget = ApoptosisWidget(viewer)
 
     widget.start_simulation()
+

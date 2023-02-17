@@ -125,6 +125,15 @@ def _get_meshes(sheet, coords, draw_specs):
     LOGGER.info("faces", faces)
     return meshes
 
+def append_time(mesh, time):
+    """Append a time dimensions to the mesh."""
+    vertices, faces, values = mesh
+
+    # Vertices and faces may change, they each need a timepoint
+    vertices = np.concatenate((vertices, np.ones((vertices.shape[0], 1))), axis=1)
+    faces = np.concatenate((faces, np.ones((vertices.shape[0], 1))), axis=1)
+
+    return (vertices, faces, values)
 
 class TyssueWidget(QWidget):
     # your QWidget.__init__ can optionally request the napari viewer instance

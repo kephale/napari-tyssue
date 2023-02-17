@@ -7,6 +7,8 @@ a MPLv2 licensed project.
 import logging
 from typing import TYPE_CHECKING
 
+import numpy as np
+
 # tyssue imports
 
 # import pandas as pd
@@ -247,8 +249,7 @@ class InvaginationWidget(TyssueWidget):
 
             while (
                 manager.current and self.t < self.stop and self.running == True
-            ):
-                self.t += 1
+            ):            
 
                 # Clean radial tension on all vertices
                 sheet.vert_df["radial_tension"] = 0
@@ -262,6 +263,7 @@ class InvaginationWidget(TyssueWidget):
                 pbr.update(1)
                 pbr.set_description(f"Simulation step {self.t}")
                 self._on_simulation_update()
+                self.t += 1
 
         color = sheet.vert_df["y"]
 
@@ -277,25 +279,54 @@ class InvaginationWidget(TyssueWidget):
         spec_updater(draw_specs, specs_kw)
         coords = ["x", "y", "z"]
 
+        layer_name = "tyssue: invagination"
+
+        vert_offset = 0
+        if layer_name in self.viewer.layers:
+            # Offset is # of vertices for all timepoints
+            vert_offset = self.viewer.layers[layer_name].data[0].shape[0]        
+        
         sheet = self.history.retrieve(self.t)
         meshes = _get_meshes(sheet, coords, draw_specs)
-        mesh = meshes[0]
-        LOGGER.info(mesh)
+        vertices, faces, values = meshes[0]
+
         LOGGER.info(
-            f"mesh: ({mesh[0].shape}, {mesh[1].shape}, {mesh[2].shape})"
+            f"num_meshes = {len(meshes)} mesh: ({vertices.shape}, {faces.shape}, {values.shape})"
         )
+
+        num_verts = vertices.shape[0]
+
+        # Now we need to make the mesh into a timepoint
+        tp_vertices = np.concatenate(
+            (np.ones((num_verts, 1)) * self.t, vertices), axis=1
+        )
+        tp_faces = faces + vert_offset
 
         try:
             # if the layer exists, update the data
-            self.viewer.layers["tyssue: invagination"].data = mesh
+            curr_verts, curr_faces, curr_values = self.viewer.layers[
+                layer_name
+            ].data
+
+            self.viewer.layers[layer_name].data = (
+                np.concatenate((curr_verts, tp_vertices), axis=0),
+                np.concatenate((curr_faces, tp_faces), axis=0),
+                # For multichannel
+                # np.concatenate((curr_values, values), axis=1),
+                np.concatenate((curr_values, values), axis=0),
+            )
+
+            # Update timepoint that is displayed
+            self.viewer.dims.set_current_step(0, self.t)
+            
         except KeyError:
             # otherwise add it to the viewer
             self.viewer.add_surface(
-                mesh,
-                colormap="turbo",
+                (tp_vertices, tp_faces, values),
+                colormap="viridis",
                 opacity=0.9,
                 contrast_limits=[0, 1],
-                name="tyssue: invagination",
+                name=layer_name,
             )
 
 
