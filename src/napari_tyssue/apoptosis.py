@@ -232,5 +232,3 @@ if __name__ == "__main__":
     widget = ApoptosisWidget(viewer)
 
     widget.start_simulation()
-
-    # widget = viewer.window.add_plugin_dock_widget("napari-tyssue")

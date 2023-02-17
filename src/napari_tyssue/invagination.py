@@ -72,7 +72,7 @@ from superqt.utils import ensure_main_thread
 
 LOGGER = logging.getLogger("napari_tyssue.Invagination")
 
-from .tyssuewidget import TyssueWidget, _get_meshes
+from napari_tyssue.tyssuewidget import TyssueWidget, _get_meshes
 
 
 # This widget wraps the invagination demo from tyssue.
@@ -142,9 +142,8 @@ class InvaginationWidget(TyssueWidget):
         # Add a new callback for the timeslider
 
     def start_simulation(self):
-
         sheet = ellipsoid_sheet(*self.specs["settings"]["abc"], 13)
-        print(f"The sheet has {sheet.Nf} vertices")
+        LOGGER.info(f"The sheet has {sheet.Nf} vertices")
         sheet.update_specs(self.specs)
 
         geom.update_all(sheet)
@@ -170,8 +169,8 @@ class InvaginationWidget(TyssueWidget):
             ]
         )
 
-        print("Our model has the following elements :")
-        print("\t", *model.labels, sep="\n\t")
+        LOGGER.info("Our model has the following elements :")
+        LOGGER.info("\t", *model.labels, sep="\n\t")
 
         # Modify some initial values
         sheet.face_df["prefered_area"] = sheet.face_df["area"].mean()
@@ -191,7 +190,7 @@ class InvaginationWidget(TyssueWidget):
         solver = QSSolver()
         res = solver.find_energy_min(sheet, geom, model, **solver_kw)
 
-        print(res.message)
+        LOGGER.info(res.message)
         # fig, ax = sheet_view(sheet, coords=list("zx"), mode="quick")
 
         # Define ovoid mesoderm
@@ -200,7 +199,9 @@ class InvaginationWidget(TyssueWidget):
         mesoderm = sheet.face_df[sheet.face_df.is_mesoderm].index
         delaminating_cells = sheet.face_df[sheet.face_df["is_mesoderm"]].index
         sheet.face_df["is_relaxation"] = False
-        print("number of apoptotic cells: {}".format(delaminating_cells.size))
+        LOGGER.info(
+            "number of apoptotic cells: {}".format(delaminating_cells.size)
+        )
         # fig, axes = mesoderm_position(sheet, delaminating_cells)
 
         sheet.face_df["id"] = sheet.face_df.index.values
@@ -279,8 +280,10 @@ class InvaginationWidget(TyssueWidget):
         sheet = self.history.retrieve(self.t)
         meshes = _get_meshes(sheet, coords, draw_specs)
         mesh = meshes[0]
-        print(mesh)
-        print(f"mesh: ({mesh[0].shape}, {mesh[1].shape}, {mesh[2].shape})")
+        LOGGER.info(mesh)
+        LOGGER.info(
+            f"mesh: ({mesh[0].shape}, {mesh[1].shape}, {mesh[2].shape})"
+        )
 
         try:
             # if the layer exists, update the data
@@ -294,3 +297,12 @@ class InvaginationWidget(TyssueWidget):
                 contrast_limits=[0, 1],
                 name="tyssue: invagination",
             )
+
+
+if __name__ == "__main__":
+    viewer = napari.Viewer()
+
+    # LOGGER.setLevel(logging.DEBUG)
+    widget = InvaginationWidget(viewer)
+
+    widget.start_simulation()
