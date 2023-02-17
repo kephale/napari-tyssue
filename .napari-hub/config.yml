@@ -7,3 +7,6 @@
 # in your standard python package metadata (e.g. setup.cfg, setup.py, or
 # pyproject.toml), when you would like those fields to be displayed
 # differently on the hub than in the napari application.
+authors:
+  - name: Kyle Harrington
+    orcid: 0000-0002-7237-1973
