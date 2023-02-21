@@ -94,7 +94,7 @@ class InvaginationWidget(TyssueWidget):
         self.t = 0
 
         # This is the stop time of the simulation
-        self.stop = 100
+        self.stop = 20
 
         self.contractility_rate = 2
         self.critical_area = 5
@@ -336,4 +336,6 @@ if __name__ == "__main__":
     # LOGGER.setLevel(logging.DEBUG)
     widget = InvaginationWidget(viewer)
 
-    widget.start_simulation()
+    viewer.window.add_dock_widget(widget, name="napari-tyssue")
+    
+    # widget.start_simulation()

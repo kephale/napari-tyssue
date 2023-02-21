@@ -271,5 +271,7 @@ if __name__ == "__main__":
     # LOGGER.setLevel(logging.DEBUG)
     widget = ApoptosisWidget(viewer)
 
-    widget.start_simulation()
+    viewer.window.add_dock_widget(widget, name="napari-tyssue")
+    
+    # widget.start_simulation()
 
